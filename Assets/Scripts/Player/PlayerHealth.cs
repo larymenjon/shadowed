@@ -38,7 +38,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        SceneManager.LoadScene(2); // GAME OVER
+        SceneManager.LoadScene(6); // GAME OVER
     }
 
     // Renomeado para evitar confusão com a variável damageCooldown

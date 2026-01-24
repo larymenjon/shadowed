@@ -2177,6 +2177,7 @@ GameObject:
   - component: {fileID: 675213576}
   - component: {fileID: 675213575}
   - component: {fileID: 675213574}
+  - component: {fileID: 675213577}
   m_Layer: 3
   m_Name: Skull Garden Tiles_96x96 Sprite Sheet_11 _3
   m_TagString: Ground
@@ -2303,6 +2304,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1225471296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &675213577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675213573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdaad041c6eae744983ad2f8425ed7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrowingPlatform
+  growPerStep: 0.06
+  maxWidth: 7
+  jumpsToShrink: 3
+  shrinkAmount: 0.8
 --- !u!1 &689430852
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,9 +2509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79408d0449cef9a4e902095a73c8ba5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinalDoor
-  nextLevelName: Level_02
-  transitionScene: PassGame
-  nextLevel: Level_02
+  transitionScene: EndGame
+  nextLevel: 
 --- !u!1 &728185655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4744,6 +4760,7 @@ GameObject:
   - component: {fileID: 1389012869}
   - component: {fileID: 1389012868}
   - component: {fileID: 1389012867}
+  - component: {fileID: 1389012870}
   m_Layer: 3
   m_Name: Skull Garden Tiles_96x96 Sprite Sheet_11_1
   m_TagString: Ground
@@ -4870,6 +4887,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1225471296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1389012870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389012866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdaad041c6eae744983ad2f8425ed7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrowingPlatform
+  growPerStep: 0.06
+  maxWidth: 7
+  jumpsToShrink: 3
+  shrinkAmount: 0.8
 --- !u!1 &1389247503
 GameObject:
   m_ObjectHideFlags: 0
@@ -5051,6 +5084,7 @@ GameObject:
   - component: {fileID: 1408602990}
   - component: {fileID: 1408602989}
   - component: {fileID: 1408602996}
+  - component: {fileID: 1408602997}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5271,6 +5305,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1408602997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408602988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce99a2952810d4469a556ba675822c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStepCounter
+  steps: 0
+  jumps: 0
+  stepInterval: 0.25
 --- !u!1 &1412950000
 GameObject:
   m_ObjectHideFlags: 0
@@ -6236,6 +6285,7 @@ GameObject:
   - component: {fileID: 1759051754}
   - component: {fileID: 1759051756}
   - component: {fileID: 1759051755}
+  - component: {fileID: 1759051757}
   m_Layer: 3
   m_Name: Skull Garden Tiles_96x96 Sprite Sheet_11_2
   m_TagString: Ground
@@ -6362,6 +6412,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1759051757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759051753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdaad041c6eae744983ad2f8425ed7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrowingPlatform
+  growPerStep: 0.06
+  maxWidth: 7
+  jumpsToShrink: 3
+  shrinkAmount: 0.8
 --- !u!1 &1782777856
 GameObject:
   m_ObjectHideFlags: 0

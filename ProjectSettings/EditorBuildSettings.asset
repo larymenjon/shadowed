@@ -12,8 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/Level_01.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/GameOver.unity
+    path: Assets/Scenes/Level_02.unity
+    guid: 8c308e274d1bb2f4d8c1c0574bf12118
+  - enabled: 1
+    path: Assets/Scenes/Level_03.unity
+    guid: 707711a427f13b649ab632023302e5ee
+  - enabled: 1
+    path: Assets/Scenes/PassGame.unity
+    guid: e51809cdf2ebe2f49beeb487a0b276c0
+  - enabled: 1
+    path: Assets/Scenes/EndGame.unity
     guid: e0218d284eb62df4c8dbe4ad4ee0953b
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 4baa88c93661c0e419a23982166db3a1
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

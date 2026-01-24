@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Pause")]
     public bool isPaused;
-    public GameObject pausePanel; // 🔹 ARRASTE O PAUSE PANEL AQUI
+    public GameObject pausePanel; // ARRASTE O PAUSE PANEL AQUI
+
+    [Header("Level Flow")]
+    public string nextLevel;
 
     private void Awake()
     {
@@ -40,7 +43,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    TogglePause();
+        //}
+        if (Input.GetKeyDown(KeyCode.P) && pausePanel != null)
         {
             TogglePause();
         }
@@ -108,6 +115,7 @@ public class GameManager : MonoBehaviour
 
     internal void AddCoin(int value)
     {
-        throw new NotImplementedException();
+        coins += value;
+        // UIManager.Instance.UpdateCoins(coins);
     }
 }
