@@ -23,14 +23,14 @@ Plan every step carefully. One wrong move can be your last</p>
 <h4 class="text-center"><img src="https://img.itch.zone/aW1nLzI1MTgwNDgzLnBuZw==/original/UJ1iYT.png"></h4>
 <h4></h4>
 <h4>About the Project</h4>
-<p>Game developed for a&nbsp;<strong>Game Jam.</strong>
-</p>
-<p><strong>&nbsp;Engine</strong>:&nbsp;Unity
-</p>
-<p><strong>Game Design & Programming</strong>
-</p>
-<p>Laryssa Aguiar Menjon
+<p><strong>Game Design & Programming</strong></p>
+<p>
+<a href="https://www.linkedin.com/in/larymenjon" target="_blank">
+Laryssa Aguiar Menjon
+</a><br>
+<a href="https://thaianecassetari.itch.io/" target="_blank">
 Thaiane Cassetari
+</a>
 </p>
 <p><strong>&nbsp;Art & Assets</strong>:&nbsp;Craftpix.netControls
 </p>
