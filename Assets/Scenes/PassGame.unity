@@ -167,12 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -407,6 +407,7 @@ MonoBehaviour:
   coins: 30
   isPaused: 0
   pausePanel: {fileID: 689430852}
+  nextLevel: 
 --- !u!4 &429627924
 Transform:
   m_ObjectHideFlags: 0
@@ -1392,14 +1393,14 @@ RectTransform:
   m_GameObject: {fileID: 960941787}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.87310684, y: 0.87310684, z: 0.87310684}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 381498463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.7785, y: 135}
+  m_AnchoredPosition: {x: -3.7785, y: 48}
   m_SizeDelta: {x: 1406.2375, y: 644.9794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &960941789
@@ -1424,7 +1425,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: b336427fad032224d996057f6b3454e7, type: 3}
-    m_FontSize: 220
+    m_FontSize: 190
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -1471,7 +1472,7 @@ RectTransform:
   m_GameObject: {fileID: 1109061913}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.67471, y: 0.67471, z: 0.67471}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 381498463}
@@ -1567,12 +1568,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1783,7 +1784,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassGameController
   waitTime: 2.5
-  nextLevel: Level_02
 --- !u!4 &1270327409
 Transform:
   m_ObjectHideFlags: 0
@@ -2255,6 +2255,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 686012768373986973, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 686012768373986973, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 686012768373986973, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 686012768373986973, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 720
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129648199554898651, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046553676667771105, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 13.299936
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046553676667771105, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 13.299936
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046553676667771105, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 13.299936
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046553676667771105, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046553676667771105, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -96
+      objectReference: {fileID: 0}
     - target: {fileID: 7374708483978876178, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2341,7 +2381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8413373087837412348, guid: a1ff85eeeb312af4d97026b206a3acb5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
