@@ -4,20 +4,24 @@
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float speed = 8f;
-    public float jumpForce = 11f;
+    public float speed = 6.25f;
+    public float jumpForce = 10.25f;
 
     [Header("Jump Feel")]
-    public float fallMultiplier = 3.5f;
-    public float lowJumpMultiplier = 3f;
+    public float fallMultiplier = 3.1f;
+    public float lowJumpMultiplier = 2.7f;
+    public float coyoteTime = 0.12f;
+    public float jumpBufferTime = 0.12f;
 
     // Usado por inimigos
     public float CurrentMoveInput { get; private set; }
-    public bool PlayerIsMoving => Mathf.Abs(CurrentMoveInput) > 0.01f;
+    public bool PlayerIsMoving => rb != null && (Mathf.Abs(rb.linearVelocity.x) > 0.05f || Mathf.Abs(rb.linearVelocity.y) > 0.12f);
 
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
     private bool isGrounded;
+    private float coyoteTimer;
+    private float jumpBufferTimer;
 
     private void Awake()
     {
@@ -29,7 +33,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleMovement();
-        HandleJump();
+        HandleJumpInput();
+        HandleJumpExecution();
         HandleBetterJump();
     }
 
@@ -44,12 +49,25 @@ public class PlayerController : MonoBehaviour
         else if (move < 0) sprite.flipX = true;
     }
 
-    private void HandleJump()
+    private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferTimer = jumpBufferTime;
+        }
+
+        jumpBufferTimer -= Time.deltaTime;
+        coyoteTimer -= Time.deltaTime;
+    }
+
+    private void HandleJumpExecution()
+    {
+        if (jumpBufferTimer > 0f && coyoteTimer > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isGrounded = false; // evita double jump acidental
+            isGrounded = false;
+            coyoteTimer = 0f;
+            jumpBufferTimer = 0f;
         }
     }
 
@@ -81,6 +99,7 @@ public class PlayerController : MonoBehaviour
             if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
+                coyoteTimer = coyoteTime;
                 rb.gravityScale = 1f;
                 break;
             }
@@ -97,6 +116,7 @@ public class PlayerController : MonoBehaviour
             if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
+                coyoteTimer = coyoteTime;
                 return;
             }
         }

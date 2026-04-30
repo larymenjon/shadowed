@@ -5,11 +5,13 @@ public class MainMenuUI : MonoBehaviour
 {
     public GameObject optionsPanel;
     public GameObject creditsPanel;
+    [Header("Flow")]
+    [SerializeField] private string firstSceneAfterMenu = "LoginFake";
 
     public void StartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Level_01");
+        SceneManager.LoadScene(firstSceneAfterMenu);
     }
 
     public void OpenOptions()

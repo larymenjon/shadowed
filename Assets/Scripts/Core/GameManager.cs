@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         ResumeGame();
-        SceneManager.LoadScene("Level_01");
+        SceneManager.LoadScene("LoginFake");
     }
 
     public void QuitGame()

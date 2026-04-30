@@ -1,25 +1,30 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections; // Adicionado para facilitar o uso de Coroutines
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxLives = 3;
     public float damageCooldown = 1f;
+    [SerializeField] private string gameOverSceneName = "GameOver";
 
     private int currentLives;
     private bool canTakeDamage = true;
+    private PlayerDamageFeedback damageFeedback;
 
     private void Start()
     {
+        damageFeedback = GetComponent<PlayerDamageFeedback>();
         currentLives = maxLives;
-        if (UIHealth.Instance != null) // Prevenção de erro caso a UI não esteja na cena
+
+        if (UIHealth.Instance != null)
             UIHealth.Instance.UpdateHearts(currentLives);
     }
 
     public void TakeDamage(int amount)
     {
-        if (!canTakeDamage) return;
+        if (!canTakeDamage)
+            return;
 
         currentLives -= amount;
 
@@ -32,16 +37,18 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
+            if (damageFeedback != null)
+                damageFeedback.Blink();
+
             StartCoroutine(DamageCooldownRoutine());
         }
     }
 
     private void Die()
     {
-        SceneManager.LoadScene(6); // GAME OVER
+        SceneManager.LoadScene(gameOverSceneName);
     }
 
-    // Renomeado para evitar confusão com a variável damageCooldown
     private IEnumerator DamageCooldownRoutine()
     {
         canTakeDamage = false;
@@ -49,5 +56,3 @@ public class PlayerHealth : MonoBehaviour
         canTakeDamage = true;
     }
 }
-
-

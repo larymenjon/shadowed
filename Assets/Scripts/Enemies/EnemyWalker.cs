@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyWalker : EnemyBase
 {
     public float speed = 2f;
+    public float stopDamping = 10f;
 
     private void FixedUpdate()
     {
@@ -16,7 +17,7 @@ public class EnemyWalker : EnemyBase
             rb.linearVelocity = Vector2.Lerp(
                 rb.linearVelocity,
                 Vector2.zero,
-                10f * Time.fixedDeltaTime
+                stopDamping * Time.fixedDeltaTime
             );
             return;
         }
@@ -25,11 +26,7 @@ public class EnemyWalker : EnemyBase
         float enemyDirection = -Mathf.Sign(playerInput);
 
         rb.linearVelocity = new Vector2(enemyDirection * speed, rb.linearVelocity.y);
-
-        // Flip visual
-        Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * enemyDirection;
-        transform.localScale = scale;
+        FaceDirection(enemyDirection);
     }
 }
 

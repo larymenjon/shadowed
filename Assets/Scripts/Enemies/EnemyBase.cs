@@ -6,10 +6,12 @@ public class EnemyBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected PlayerController player;
     protected Rigidbody2D playerRb;
+    protected SpriteRenderer spriteRenderer;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         player = Object.FindFirstObjectByType<PlayerController>();
 
         if (player != null)
@@ -24,6 +26,22 @@ public class EnemyBase : MonoBehaviour
         // Player andando OU pulando
         return player.CurrentMoveInput != 0 ||
                Mathf.Abs(playerRb.linearVelocity.y) > 0.1f;
+    }
+
+    protected void FaceDirection(float direction)
+    {
+        if (Mathf.Abs(direction) < 0.01f)
+            return;
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.flipX = direction < 0f;
+            return;
+        }
+
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction);
+        transform.localScale = scale;
     }
 }
 
