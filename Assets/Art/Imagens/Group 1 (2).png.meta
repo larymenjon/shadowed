@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 36ff7192aee6e2046829cb06998c63ab
+guid: 01292851c23d1124dbb165d6dfb68e57
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5760202260919997367
-    second: BackGround_0
+      213: 1331818912538681268
+    second: Group 1 (2)_0
+  - first:
+      213: -6221969362506138793
+    second: Group 1 (2)_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +75,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -100,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BackGround_0
+      name: Group 1 (2)_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 31
         y: 0
-        width: 1280
-        height: 853
+        width: 476
+        height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7b3d98cff6950ff40800000000000000
-      internalID: 5760202260919997367
+      spriteID: 4bfd303ae329b7210800000000000000
+      internalID: 1331818912538681268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Group 1 (2)_1
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 38
+        width: 420
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75b357884df17a9a0800000000000000
+      internalID: -6221969362506138793
       vertices: []
       indices: 
       edges: []
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BackGround_0: 5760202260919997367
+      Group 1 (2)_0: 1331818912538681268
+      Group 1 (2)_1: -6221969362506138793
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

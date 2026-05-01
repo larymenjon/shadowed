@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0cb9f77450458374088c7e25a4c23578
+guid: b778180554b653645a61ce4cec2c2f92
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1610842411531753970
-    second: capa_0
+      213: -8802083885479851084
+    second: gpt-image-2_Professional_graphic_design_2D_illustration_silhouette_of_a_lone_character_stand-0-Photoroom_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: capa_0
+      name: gpt-image-2_Professional_graphic_design_2D_illustration_silhouette_of_a_lone_character_stand-0-Photoroom_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 630
-        height: 500
+        width: 2048
+        height: 1136
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2f9db7083acda5610800000000000000
-      internalID: 1610842411531753970
+      spriteID: 4bb88c27757b8d580800000000000000
+      internalID: -8802083885479851084
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      capa_0: 1610842411531753970
+      gpt-image-2_Professional_graphic_design_2D_illustration_silhouette_of_a_lone_character_stand-0-Photoroom_0: -8802083885479851084
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
