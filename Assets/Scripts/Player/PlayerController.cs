@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     private float coyoteTimer;
     private float jumpBufferTimer;
 
+    // Necessário para calcular os passos
+    private float distanceCounter;
+    public float distanceToCountStep = 2.0f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,6 +40,17 @@ public class PlayerController : MonoBehaviour
         HandleJumpInput();
         HandleJumpExecution();
         HandleBetterJump();
+
+        // LOGICA DE CONTAGEM DE PASSOS
+        if (isGrounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
+        {
+            distanceCounter += Mathf.Abs(rb.linearVelocity.x) * Time.deltaTime;
+            if (distanceCounter >= distanceToCountStep)
+            {
+                if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.steps++;
+                distanceCounter = 0;
+            }
+        }
     }
 
     private void HandleMovement()
@@ -65,6 +80,10 @@ public class PlayerController : MonoBehaviour
         if (jumpBufferTimer > 0f && coyoteTimer > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            // LOGICA DE CONTAGEM DE PULO
+            if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.jumps++;
+
             isGrounded = false;
             coyoteTimer = 0f;
             jumpBufferTimer = 0f;

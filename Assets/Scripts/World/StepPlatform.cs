@@ -9,7 +9,8 @@ public class StepPlatform : MonoBehaviour
     private SpriteRenderer sprite;
     private Collider2D col;
 
-    private bool appeared = false;
+    // Alterado para true para começar aparecendo
+    private bool appeared = true;
 
     private int stepCheckpoint;
     private int jumpCheckpoint;
@@ -19,17 +20,24 @@ public class StepPlatform : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
 
-        stepCheckpoint = PlayerStepCounter.instance.steps;
-        HidePlatform();
+        // Se começa aparecendo, o checkpoint que importa agora é o de pulos
+        if (PlayerStepCounter.instance != null)
+        {
+            jumpCheckpoint = PlayerStepCounter.instance.jumps;
+        }
+        
+        ShowPlatform(); // Garante que comece visível
     }
 
     void Update()
     {
+        if (PlayerStepCounter.instance == null) return;
+
         // QUANTOS PASSOS DESDE QUE A PLATAFORMA SUMIU
-        int stepsSinceHide = PlayerStepCounter.instance.steps - stepCheckpoint;
+        int stepsSinceHide = Mathf.Max(0, PlayerStepCounter.instance.steps - stepCheckpoint);
 
         // QUANTOS PULOS DESDE QUE A PLATAFORMA APARECEU
-        int jumpsSinceShow = PlayerStepCounter.instance.jumps - jumpCheckpoint;
+        int jumpsSinceShow = Mathf.Max(0, PlayerStepCounter.instance.jumps - jumpCheckpoint);
 
         // APARECER
         if (!appeared && stepsSinceHide >= stepsToAppear)
