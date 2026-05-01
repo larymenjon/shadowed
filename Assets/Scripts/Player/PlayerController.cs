@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [FormerlySerializedAs("speed")]
     public float maxSpeed = 7f;
     public float acceleration = 70f;
     public float deceleration = 90f;
@@ -40,6 +38,10 @@ public class PlayerController : MonoBehaviour
     private int jumpsRemaining;
     private float moveInput;
 
+    // Necessario para calcular os passos
+    private float distanceCounter;
+    public float distanceToCountStep = 2.0f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,6 +60,16 @@ public class PlayerController : MonoBehaviour
         UpdateTimers();
         HandleJumpExecution();
         HandleBetterJump();
+
+        if (isGrounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
+        {
+            distanceCounter += Mathf.Abs(rb.linearVelocity.x) * Time.deltaTime;
+            if (distanceCounter >= distanceToCountStep)
+            {
+                if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.steps++;
+                distanceCounter = 0f;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -115,6 +127,7 @@ public class PlayerController : MonoBehaviour
         if (canGroundOrCoyoteJump)
         {
             DoJump();
+            if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.jumps++;
             coyoteTimer = 0f;
             return;
         }
