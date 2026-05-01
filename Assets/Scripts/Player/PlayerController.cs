@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
         HandleJumpExecution();
         HandleBetterJump();
 
+        // LOGICA DE CONTAGEM DE PASSOS
         if (isGrounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
         {
             distanceCounter += Mathf.Abs(rb.linearVelocity.x) * Time.deltaTime;
@@ -127,7 +128,10 @@ public class PlayerController : MonoBehaviour
         if (canGroundOrCoyoteJump)
         {
             DoJump();
+
+            // LOGICA DE CONTAGEM DE PULO
             if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.jumps++;
+
             coyoteTimer = 0f;
             return;
         }
