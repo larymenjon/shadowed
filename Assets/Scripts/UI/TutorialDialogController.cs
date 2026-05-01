@@ -14,6 +14,7 @@ public class TutorialDialogController : MonoBehaviour
     [SerializeField] private GameObject dialogRoot;
     [SerializeField] private TextMeshProUGUI dialogText;
     [SerializeField] private TextMeshProUGUI continueHintText;
+    [SerializeField] private string continueButtonLabel = "Continuar";
 
     [Header("Text")]
     [TextArea(3, 8)]
@@ -38,6 +39,7 @@ public class TutorialDialogController : MonoBehaviour
     private int lineIndex = -1;
     private bool visible;
     private bool finishing;
+    private CanvasGroup dialogCanvasGroup;
 
     private void OnValidate()
     {
@@ -47,18 +49,25 @@ public class TutorialDialogController : MonoBehaviour
     private void Awake()
     {
         AutoWireIfNeeded();
-
-        if (dialogRoot != null)
-        {
-            dialogRoot.SetActive(false);
-        }
+        CacheCanvasGroup();
+        SetDialogVisible(false);
     }
 
     private void Start()
     {
+        // Garantia para cenas que venham de pause/menu com timescale alterado.
+        Time.timeScale = 1f;
+
         if (showOnStart)
         {
-            Invoke(nameof(Show), showDelay);
+            if (showDelay <= 0f)
+            {
+                Show();
+            }
+            else
+            {
+                StartCoroutine(ShowAfterDelayRealtime(showDelay));
+            }
         }
     }
 
@@ -76,15 +85,12 @@ public class TutorialDialogController : MonoBehaviour
     public void Show()
     {
         AutoWireIfNeeded();
-
-        if (dialogRoot != null)
-        {
-            dialogRoot.SetActive(true);
-        }
+        CacheCanvasGroup();
+        SetDialogVisible(true);
 
         if (continueHintText != null)
         {
-            continueHintText.text = "Aperte ENTER ou clique em Continuar";
+            continueHintText.text = continueButtonLabel;
         }
 
         visible = true;
@@ -110,10 +116,7 @@ public class TutorialDialogController : MonoBehaviour
     private void Hide()
     {
         visible = false;
-        if (dialogRoot != null)
-        {
-            dialogRoot.SetActive(false);
-        }
+        SetDialogVisible(false);
     }
 
     private void FinishDialog()
@@ -173,5 +176,50 @@ public class TutorialDialogController : MonoBehaviour
                 continueHintText = texts[1];
             }
         }
+    }
+
+    private System.Collections.IEnumerator ShowAfterDelayRealtime(float delay)
+    {
+        float elapsed = 0f;
+        while (elapsed < delay)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        Show();
+    }
+
+    private void CacheCanvasGroup()
+    {
+        if (dialogRoot == null)
+            return;
+
+        if (dialogCanvasGroup == null)
+            dialogCanvasGroup = dialogRoot.GetComponent<CanvasGroup>();
+
+        if (dialogCanvasGroup == null)
+            dialogCanvasGroup = dialogRoot.AddComponent<CanvasGroup>();
+    }
+
+    private void SetDialogVisible(bool isVisible)
+    {
+        if (dialogRoot == null)
+            return;
+
+        // Nao desativa o GameObject do proprio script para evitar bloquear o Start.
+        if (dialogRoot == gameObject)
+        {
+            CacheCanvasGroup();
+            if (dialogCanvasGroup == null)
+                return;
+
+            dialogCanvasGroup.alpha = isVisible ? 1f : 0f;
+            dialogCanvasGroup.interactable = isVisible;
+            dialogCanvasGroup.blocksRaycasts = isVisible;
+            return;
+        }
+
+        dialogRoot.SetActive(isVisible);
     }
 }

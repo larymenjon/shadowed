@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class LevelIntroOverlay : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class LevelIntroOverlay : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1f;
+        EnsureOverlayReferences();
+
         if (levelText != null)
         {
             levelText.text = title;
@@ -77,6 +80,72 @@ public class LevelIntroOverlay : MonoBehaviour
         }
 
         SetGameplayEnabled(true);
+    }
+
+    private void EnsureOverlayReferences()
+    {
+        if (overlayGroup == null)
+            overlayGroup = GetComponentInChildren<CanvasGroup>(true);
+
+        if (overlayGroup == null)
+        {
+            Canvas canvas = GetComponentInChildren<Canvas>(true);
+            if (canvas == null)
+            {
+                GameObject canvasGO = new GameObject("LevelIntroCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+                canvasGO.transform.SetParent(transform, false);
+
+                canvas = canvasGO.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 999;
+
+                CanvasScaler scaler = canvasGO.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920f, 1080f);
+                scaler.matchWidthOrHeight = 0.5f;
+            }
+
+            GameObject overlayGO = new GameObject("LevelIntroOverlay", typeof(RectTransform), typeof(CanvasGroup), typeof(Image));
+            overlayGO.transform.SetParent(canvas.transform, false);
+
+            RectTransform overlayRect = overlayGO.GetComponent<RectTransform>();
+            overlayRect.anchorMin = Vector2.zero;
+            overlayRect.anchorMax = Vector2.one;
+            overlayRect.offsetMin = Vector2.zero;
+            overlayRect.offsetMax = Vector2.zero;
+
+            Image bg = overlayGO.GetComponent<Image>();
+            bg.color = Color.black;
+            bg.raycastTarget = true;
+
+            overlayGroup = overlayGO.GetComponent<CanvasGroup>();
+        }
+
+        if (levelText == null && overlayGroup != null)
+        {
+            levelText = overlayGroup.GetComponentInChildren<TextMeshProUGUI>(true);
+        }
+
+        if (levelText == null && overlayGroup != null)
+        {
+            GameObject textGO = new GameObject("LevelTitleText", typeof(RectTransform), typeof(TextMeshProUGUI));
+            textGO.transform.SetParent(overlayGroup.transform, false);
+
+            RectTransform textRect = textGO.GetComponent<RectTransform>();
+            textRect.anchorMin = new Vector2(0.5f, 0.5f);
+            textRect.anchorMax = new Vector2(0.5f, 0.5f);
+            textRect.pivot = new Vector2(0.5f, 0.5f);
+            textRect.anchoredPosition = Vector2.zero;
+            textRect.sizeDelta = new Vector2(900f, 220f);
+
+            TextMeshProUGUI tmp = textGO.GetComponent<TextMeshProUGUI>();
+            tmp.text = title;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.fontSize = 96f;
+            tmp.color = Color.white;
+
+            levelText = tmp;
+        }
     }
 
     private void SetGameplayEnabled(bool enabled)
