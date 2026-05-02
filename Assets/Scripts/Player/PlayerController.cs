@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -21,6 +22,15 @@ public class PlayerController : MonoBehaviour
     public float wallNormalThreshold = 0.6f;
     public float wallSlideMaxFallSpeed = -14f;
 
+    [Header("Combat")]
+    [SerializeField] private int attackDamage = 1;
+    [SerializeField] private float attackRange = 1.2f;
+    [SerializeField] private float attackCooldown = 0.35f;
+    [SerializeField] private float attackSpriteDuration = 0.12f;
+    [SerializeField] private LayerMask attackMask;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private Sprite attackSprite;
+
     // Usado por inimigos
     public float CurrentMoveInput { get; private set; }
     public bool PlayerIsMoving => rb != null && (Mathf.Abs(rb.linearVelocity.x) > 0.05f || Mathf.Abs(rb.linearVelocity.y) > 0.12f);
@@ -42,10 +52,15 @@ public class PlayerController : MonoBehaviour
     private float distanceCounter;
     public float distanceToCountStep = 2.0f;
 
+    private float lastAttackTime = -999f;
+    private Sprite defaultSprite;
+    private Coroutine attackSpriteRoutine;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
+        defaultSprite = sprite != null ? sprite.sprite : null;
         rb.gravityScale = 1f;
     }
 
@@ -93,6 +108,50 @@ public class PlayerController : MonoBehaviour
             jumpBufferTimer = jumpBufferTime;
             wantsJump = true;
         }
+
+        if (Input.GetMouseButtonDown(0))
+            TryAttack();
+    }
+
+    private void TryAttack()
+    {
+        if (Time.time < lastAttackTime + attackCooldown)
+            return;
+
+        lastAttackTime = Time.time;
+        PlayAttackSprite();
+
+        Vector2 hitCenter = attackPoint != null ? (Vector2)attackPoint.position : (Vector2)transform.position;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(hitCenter, attackRange, attackMask);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i] == null)
+                continue;
+
+            VampireHealth vampire = hits[i].GetComponentInParent<VampireHealth>();
+            if (vampire != null)
+                vampire.TakeDamage(attackDamage);
+        }
+    }
+
+    private void PlayAttackSprite()
+    {
+        if (sprite == null || attackSprite == null)
+            return;
+
+        if (attackSpriteRoutine != null)
+            StopCoroutine(attackSpriteRoutine);
+
+        attackSpriteRoutine = StartCoroutine(AttackSpriteRoutine());
+    }
+
+    private IEnumerator AttackSpriteRoutine()
+    {
+        sprite.sprite = attackSprite;
+        yield return new WaitForSeconds(attackSpriteDuration);
+        sprite.sprite = defaultSprite;
+        attackSpriteRoutine = null;
     }
 
     private void UpdateTimers()
@@ -226,5 +285,12 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = false;
         isTouchingWall = false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 center = attackPoint != null ? attackPoint.position : transform.position;
+        Gizmos.DrawWireSphere(center, attackRange);
     }
 }

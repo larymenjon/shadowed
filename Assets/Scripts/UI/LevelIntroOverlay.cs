@@ -40,6 +40,7 @@ public class LevelIntroOverlay : MonoBehaviour
         {
             overlayGroup.alpha = 1f;
             overlayGroup.blocksRaycasts = true;
+            overlayGroup.gameObject.SetActive(true);
         }
 
         if (levelText != null)
@@ -78,6 +79,9 @@ public class LevelIntroOverlay : MonoBehaviour
             overlayGroup.blocksRaycasts = false;
             overlayGroup.gameObject.SetActive(false);
         }
+
+        if (levelText != null)
+            levelText.gameObject.SetActive(false);
 
         SetGameplayEnabled(true);
     }

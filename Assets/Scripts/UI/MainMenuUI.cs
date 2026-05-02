@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using TMPro;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+#if !ENABLE_LEGACY_INPUT_MANAGER
+using UnityEngine.InputSystem.UI;
+#endif
 #endif
 
 public class MainMenuUI : MonoBehaviour
@@ -33,6 +36,8 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private AudioSource uiAudioSource;
     [SerializeField] private AudioClip hoverSfx;
     [SerializeField] private float hoverVolume = 1f;
+    [SerializeField] private AudioClip clickSfx;
+    [SerializeField] private float clickVolume = 1f;
 
     [Header("Flow")]
     [SerializeField] private string firstSceneAfterMenu = "LoginFake";
@@ -45,7 +50,17 @@ public class MainMenuUI : MonoBehaviour
 
     private void Start()
     {
+        EnsureMenuInputState();
+        EnsureEventSystemExists();
         AutoConfigureIfNeeded();
+        NormalizePanelForUI(optionsPanel);
+        NormalizePanelForUI(creditsPanel);
+        NormalizePanelForUI(controlsPanel);
+
+        if (optionsPanel != null) optionsPanel.SetActive(false);
+        if (creditsPanel != null) creditsPanel.SetActive(false);
+        if (controlsPanel != null) controlsPanel.SetActive(false);
+        SetMenuOptionsVisible(true);
 
         if (menuButtons == null || menuButtons.Length == 0)
         {
@@ -66,12 +81,40 @@ public class MainMenuUI : MonoBehaviour
         }
 
         ApplyTextHighlight(null);
+        BindButtonClickSounds();
+    }
+
+    private void EnsureMenuInputState()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void EnsureEventSystemExists()
+    {
+        if (EventSystem.current != null)
+            return;
+
+        var eventSystemGO = new GameObject("EventSystem", typeof(EventSystem));
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        eventSystemGO.AddComponent<InputSystemUIInputModule>();
+#else
+        eventSystemGO.AddComponent<StandaloneInputModule>();
+#endif
+        SceneManager.MoveGameObjectToScene(eventSystemGO, gameObject.scene);
     }
 
     private void Update()
     {
         if (menuButtons == null || menuButtons.Length == 0)
             return;
+
+        if (AnyPopupOpen())
+        {
+            UpdateMouseHoverState();
+            return;
+        }
 
         bool upPressed = Input.GetKeyDown(KeyCode.UpArrow);
         bool downPressed = Input.GetKeyDown(KeyCode.DownArrow);
@@ -166,6 +209,13 @@ public class MainMenuUI : MonoBehaviour
     public void CloseControls()
     {
         SetPanelState(controlsPanel, false);
+    }
+
+    public void ReturnFromPopup()
+    {
+        CloseOptions();
+        CloseCredits();
+        CloseControls();
     }
 
     public void QuitGame()
@@ -345,10 +395,48 @@ public class MainMenuUI : MonoBehaviour
     private void SetPanelState(GameObject panel, bool shouldOpen)
     {
         if (panel == null)
+        {
+            Debug.LogWarning("[MainMenuUI] Painel nao atribuido no Inspector.");
             return;
+        }
+
+        if (shouldOpen)
+        {
+            EnsureParentChainActive(panel.transform);
+            PreparePanelForDisplay(panel);
+        }
 
         panel.SetActive(shouldOpen);
         SetMenuOptionsVisible(!AnyPopupOpen());
+    }
+
+    private void PreparePanelForDisplay(GameObject panel)
+    {
+        panel.transform.SetAsLastSibling();
+        panel.transform.localScale = Vector3.one;
+
+        CanvasGroup canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+    }
+
+    private void EnsureParentChainActive(Transform child)
+    {
+        Transform current = child.parent;
+        while (current != null)
+        {
+            if (!current.gameObject.activeSelf)
+                current.gameObject.SetActive(true);
+
+            if (current == transform.root)
+                break;
+
+            current = current.parent;
+        }
     }
 
     private bool AnyPopupOpen()
@@ -388,6 +476,59 @@ public class MainMenuUI : MonoBehaviour
         }
 
         AudioSource.PlayClipAtPoint(hoverSfx, Camera.main != null ? Camera.main.transform.position : Vector3.zero, hoverVolume);
+    }
+
+    private void NormalizePanelForUI(GameObject panel)
+    {
+        if (panel == null)
+            return;
+
+        Canvas canvas = GetComponentInParent<Canvas>(true);
+        if (canvas == null)
+            canvas = Object.FindFirstObjectByType<Canvas>(FindObjectsInactive.Include);
+
+        if (canvas == null)
+            return;
+
+        RectTransform panelRect = panel.GetComponent<RectTransform>();
+        if (panelRect == null)
+            return;
+
+        panelRect.SetParent(canvas.transform, false);
+        panelRect.anchorMin = Vector2.zero;
+        panelRect.anchorMax = Vector2.one;
+        panelRect.offsetMin = Vector2.zero;
+        panelRect.offsetMax = Vector2.zero;
+        panelRect.localScale = Vector3.one;
+    }
+
+    public void PlayClickSound()
+    {
+        if (clickSfx == null)
+            return;
+
+        if (uiAudioSource != null)
+        {
+            uiAudioSource.PlayOneShot(clickSfx, clickVolume);
+            return;
+        }
+
+        AudioSource.PlayClipAtPoint(clickSfx, Camera.main != null ? Camera.main.transform.position : Vector3.zero, clickVolume);
+    }
+
+    private void BindButtonClickSounds()
+    {
+        if (menuButtons == null)
+            return;
+
+        foreach (var button in menuButtons)
+        {
+            if (button == null)
+                continue;
+
+            button.onClick.RemoveListener(PlayClickSound);
+            button.onClick.AddListener(PlayClickSound);
+        }
     }
 }
 
