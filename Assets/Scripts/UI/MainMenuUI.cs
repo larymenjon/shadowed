@@ -13,6 +13,8 @@ public class MainMenuUI : MonoBehaviour
 {
     public GameObject optionsPanel;
     public GameObject creditsPanel;
+    public GameObject controlsPanel;
+    [SerializeField] private GameObject menuOptionsRoot;
 
     [Header("Menu Navigation")]
     [SerializeField] private Button[] menuButtons;
@@ -27,8 +29,15 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Color normalTextColor = new Color(0.67f, 0.53f, 0.89f, 1f);
     [SerializeField] private Color highlightedTextColor = Color.white;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource uiAudioSource;
+    [SerializeField] private AudioClip hoverSfx;
+    [SerializeField] private float hoverVolume = 1f;
+
     [Header("Flow")]
     [SerializeField] private string firstSceneAfterMenu = "LoginFake";
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+    [SerializeField] private GameObject pausePanelToClose;
 
     private int selectedIndex;
     private Button currentlyHoveredButton;
@@ -100,24 +109,63 @@ public class MainMenuUI : MonoBehaviour
         SceneManager.LoadScene(firstSceneAfterMenu);
     }
 
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+
+        if (pausePanelToClose != null)
+            pausePanelToClose.SetActive(false);
+    }
+
+    public void Menu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+    public void Exit()
+    {
+        QuitGame();
+    }
+
+    public void Options()
+    {
+        OpenOptions();
+    }
+
+    public void Controls()
+    {
+        OpenControls();
+    }
+
     public void OpenOptions()
     {
-        optionsPanel.SetActive(true);
+        SetPanelState(optionsPanel, true);
     }
 
     public void CloseOptions()
     {
-        optionsPanel.SetActive(false);
+        SetPanelState(optionsPanel, false);
     }
 
     public void OpenCredits()
     {
-        creditsPanel.SetActive(true);
+        SetPanelState(creditsPanel, true);
     }
 
     public void CloseCredits()
     {
-        creditsPanel.SetActive(false);
+        SetPanelState(creditsPanel, false);
+    }
+
+    public void OpenControls()
+    {
+        SetPanelState(controlsPanel, true);
+    }
+
+    public void CloseControls()
+    {
+        SetPanelState(controlsPanel, false);
     }
 
     public void QuitGame()
@@ -178,6 +226,7 @@ public class MainMenuUI : MonoBehaviour
 
             if (currentlyHoveredButton != null)
             {
+                PlayHoverSound();
                 EventSystem.current.SetSelectedGameObject(currentlyHoveredButton.gameObject);
                 ApplyTextHighlight(currentlyHoveredButton);
 
@@ -219,13 +268,17 @@ public class MainMenuUI : MonoBehaviour
 
     private void AutoConfigureIfNeeded()
     {
-        if ((menuButtons == null || menuButtons.Length == 0))
-        {
-            var foundButtons = GetComponentsInChildren<Button>(true)
-                .Where(b => b != null && b.gameObject.activeInHierarchy)
-                .OrderByDescending(b => b.GetComponent<RectTransform>() != null ? b.GetComponent<RectTransform>().position.y : 0f)
-                .ToArray();
+        var foundButtons = GetComponentsInChildren<Button>(true)
+            .Where(b => b != null && b.gameObject.activeInHierarchy)
+            .OrderByDescending(b => b.GetComponent<RectTransform>() != null ? b.GetComponent<RectTransform>().position.y : 0f)
+            .ToArray();
 
+        bool shouldRefreshButtons = menuButtons == null || menuButtons.Length == 0;
+        if (!shouldRefreshButtons && foundButtons.Length > menuButtons.Length)
+            shouldRefreshButtons = true;
+
+        if (shouldRefreshButtons)
+        {
             menuButtons = foundButtons;
         }
 
@@ -287,6 +340,54 @@ public class MainMenuUI : MonoBehaviour
 
             pair.Value.color = pair.Key == highlightedButton ? highlightedTextColor : normalTextColor;
         }
+    }
+
+    private void SetPanelState(GameObject panel, bool shouldOpen)
+    {
+        if (panel == null)
+            return;
+
+        panel.SetActive(shouldOpen);
+        SetMenuOptionsVisible(!AnyPopupOpen());
+    }
+
+    private bool AnyPopupOpen()
+    {
+        return (optionsPanel != null && optionsPanel.activeSelf)
+            || (creditsPanel != null && creditsPanel.activeSelf)
+            || (controlsPanel != null && controlsPanel.activeSelf);
+    }
+
+    private void SetMenuOptionsVisible(bool isVisible)
+    {
+        if (menuOptionsRoot != null)
+        {
+            menuOptionsRoot.SetActive(isVisible);
+            return;
+        }
+
+        if (menuButtons == null)
+            return;
+
+        foreach (var button in menuButtons)
+        {
+            if (button != null)
+                button.gameObject.SetActive(isVisible);
+        }
+    }
+
+    private void PlayHoverSound()
+    {
+        if (hoverSfx == null)
+            return;
+
+        if (uiAudioSource != null)
+        {
+            uiAudioSource.PlayOneShot(hoverSfx, hoverVolume);
+            return;
+        }
+
+        AudioSource.PlayClipAtPoint(hoverSfx, Camera.main != null ? Camera.main.transform.position : Vector3.zero, hoverVolume);
     }
 }
 

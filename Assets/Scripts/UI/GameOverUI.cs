@@ -3,18 +3,42 @@ using UnityEngine.SceneManagement;
 
 public class GameOverController : MonoBehaviour
 {
-    public float waitTime = 5f;
     public string mainMenuScene = "MainMenu";
+    public string resumeScene = "LoginFake";
+    public GameObject optionsPanel;
 
     private void Start()
     {
-        Time.timeScale = 1f; // garante que o tempo esteja rodando
-        Invoke(nameof(GoToMainMenu), waitTime);
+        Time.timeScale = 1f;
     }
 
-    void GoToMainMenu()
+    public void Resume()
     {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(resumeScene);
+    }
+
+    public void Menu()
+    {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuScene);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+
+    public void Options()
+    {
+        if (optionsPanel != null)
+            optionsPanel.SetActive(true);
+    }
+
+    public void CloseOptions()
+    {
+        if (optionsPanel != null)
+            optionsPanel.SetActive(false);
     }
 }
 
