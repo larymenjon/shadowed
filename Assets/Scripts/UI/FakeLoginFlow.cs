@@ -27,7 +27,7 @@ public class FakeLoginFlow : MonoBehaviour
     [SerializeField] private float phraseInterval = 1f;
 
     [Header("Next")]
-    [SerializeField] private string nextSceneName = "Level_01";
+    [SerializeField] private string nextSceneName = "Level_01_Dialog";
 
     private void Start()
     {
@@ -66,6 +66,9 @@ public class FakeLoginFlow : MonoBehaviour
 
             yield return null;
         }
+
+        if (nextSceneName == "Level_01")
+            nextSceneName = "Level_01_Dialog";
 
         SceneManager.LoadScene(nextSceneName);
     }

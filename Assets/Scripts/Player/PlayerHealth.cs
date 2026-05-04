@@ -6,7 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int maxLives = 3;
     public float damageCooldown = 1f;
-    [SerializeField] private string gameOverSceneName = "GameOver";
+    [SerializeField] private string gameOverSceneName = "EndGame";
 
     private int currentLives;
     private bool canTakeDamage = true;
@@ -46,6 +46,10 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
+        // Backward compatibility: old prefabs/scenes may still have "GameOver" serialized.
+        if (gameOverSceneName == "GameOver")
+            gameOverSceneName = "EndGame";
+
         SceneManager.LoadScene(gameOverSceneName);
     }
 
