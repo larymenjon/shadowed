@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour
 {
     protected Rigidbody2D rb;
     protected PlayerController player;
@@ -23,9 +23,7 @@ public class EnemyBase : MonoBehaviour
         if (player == null || playerRb == null)
             return false;
 
-        // Player andando OU pulando
-        return player.CurrentMoveInput != 0 ||
-               Mathf.Abs(playerRb.linearVelocity.y) > 0.1f;
+        return player.CurrentMoveInput != 0f || Mathf.Abs(playerRb.linearVelocity.y) > 0.1f;
     }
 
     protected void FaceDirection(float direction)
@@ -44,6 +42,3 @@ public class EnemyBase : MonoBehaviour
         transform.localScale = scale;
     }
 }
-
-
-

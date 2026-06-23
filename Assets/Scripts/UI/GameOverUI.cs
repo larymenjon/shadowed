@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverController : MonoBehaviour
 {
-    public string mainMenuScene = "MainMenu";
-    public string resumeScene = "LoginFake";
-    public GameObject optionsPanel;
+    [SerializeField] private string mainMenuScene = "MainMenu";
+    [SerializeField] private string resumeScene = "LoginFake";
+    [SerializeField] private GameObject optionsPanel;
 
     private void Start()
     {
@@ -41,5 +41,3 @@ public class GameOverController : MonoBehaviour
             optionsPanel.SetActive(false);
     }
 }
-
-

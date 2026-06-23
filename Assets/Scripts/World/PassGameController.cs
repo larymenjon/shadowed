@@ -15,6 +15,6 @@ public class PassGameController : MonoBehaviour
     IEnumerator LoadNext()
     {
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadScene(GameManager.Instance.nextLevel);
+        SceneManager.LoadScene(GameManager.Instance.NextLevel);
     }
 }

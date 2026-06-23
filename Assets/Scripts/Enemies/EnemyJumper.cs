@@ -1,19 +1,17 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class EnemyJumper : EnemyBase
 {
     [Header("Jump Settings")]
-    public float jumpForce = 6f;
-    public float jumpCooldown = 1.5f;
-    public Transform groundCheck;
-    public LayerMask groundLayer;
+    [SerializeField] private float jumpForce = 6f;
+    [SerializeField] private float jumpCooldown = 1.5f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
 
     private float timer;
 
     private void Update()
     {
-        // Alterado para usar a variável 'player' (da classe base) 
-        // e a propriedade 'PlayerIsMoving' que adicionamos no PlayerController
         if (player == null || !player.PlayerIsMoving)
             return;
 
@@ -28,12 +26,9 @@ public class EnemyJumper : EnemyBase
 
     private bool IsGrounded()
     {
-        if (groundCheck == null) return false;
+        if (groundCheck == null)
+            return false;
 
-        return Physics2D.OverlapCircle(
-            groundCheck.position,
-            0.2f,
-            groundLayer
-        );
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 }

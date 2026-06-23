@@ -1,86 +1,90 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerStepCounter : MonoBehaviour
 {
-    public static PlayerStepCounter instance;
+    public static PlayerStepCounter Instance { get; private set; }
 
     [Header("Debug")]
-    public int steps;
-    public int jumps;
+    [SerializeField] private int steps;
+    [SerializeField] private int jumps;
 
     [Header("Config")]
-    public float stepInterval = 0.25f;
+    [SerializeField] private float stepInterval = 0.25f;
 
     private float stepTimer;
-    private Rigidbody2D rb;
     private bool isGrounded;
 
-    void Awake()
+    public int Steps => steps;
+    public int Jumps => jumps;
+
+    private void Awake()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
     }
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    void Update()
+    private void Update()
     {
         CheckMovement();
         CheckJump();
     }
 
-    void CheckMovement()
+    public void RegisterStep()
     {
-        // Setas do teclado
-        bool moving =
-            Input.GetKey(KeyCode.LeftArrow) ||
-            Input.GetKey(KeyCode.RightArrow);
+        steps++;
+    }
 
-        if (moving && isGrounded)
-        {
-            stepTimer += Time.deltaTime;
+    public void RegisterJump()
+    {
+        jumps++;
+    }
 
-            if (stepTimer >= stepInterval)
-            {
-                steps++;
-                stepTimer = 0f;
-
-                Debug.Log("PASSO contado > Total: " + steps);
-            }
-        }
-        else
+    private void CheckMovement()
+    {
+        if (!IsMovingHorizontally() || !isGrounded)
         {
             stepTimer = 0f;
+            return;
         }
+
+        stepTimer += Time.deltaTime;
+
+        if (stepTimer < stepInterval)
+            return;
+
+        RegisterStep();
+        stepTimer = 0f;
+        Debug.Log("PASSO contado > Total: " + steps);
     }
 
-    void CheckJump()
+    private bool IsMovingHorizontally()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            jumps++;
-            Debug.Log("PULO contado > Total: " + jumps);
-        }
+        return Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void CheckJump()
+    {
+        if (!Input.GetKeyDown(KeyCode.Space) || !isGrounded)
+            return;
+
+        RegisterJump();
+        Debug.Log("PULO contado > Total: " + jumps);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
-        {
             isGrounded = true;
-            Debug.Log("TOCOU NO CHAO");
-        }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
-        {
             isGrounded = false;
-            Debug.Log("SAIU DO CHAO");
-        }
     }
 }

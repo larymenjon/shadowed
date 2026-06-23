@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class VampireDamageArea : MonoBehaviour
@@ -10,10 +10,7 @@ public class VampireDamageArea : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("Player"))
-            return;
-
-        if (Time.time < nextDamageTime)
+        if (!other.CompareTag("Player") || Time.time < nextDamageTime)
             return;
 
         PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();

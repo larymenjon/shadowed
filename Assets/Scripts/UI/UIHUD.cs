@@ -1,15 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIHUD : MonoBehaviour
 {
-    public Text coinsText;
+    [SerializeField] private Text coinsText;
 
     private void Update()
     {
-        if (GameManager.Instance == null) return;
+        if (coinsText == null || GameManager.Instance == null)
+            return;
 
-        coinsText.text = GameManager.Instance.coins.ToString();
+        coinsText.text = GameManager.Instance.Coins.ToString();
     }
 }
-

@@ -1,83 +1,72 @@
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class UnstablePlatform : MonoBehaviour
 {
-    [Header("Passos da Fase")]
-    public int stepsToShake = 10;
-    public int stepsToSlip = 20;
-    public int stepsToCollapse = 30;
+    [Header("Step Thresholds")]
+    [SerializeField] private int stepsToShake = 10;
+    [SerializeField] private int stepsToSlip = 20;
+    [SerializeField] private int stepsToCollapse = 30;
 
-    [Header("Tremor")]
-    public float shakeAmount = 0.05f;
-    public float shakeSpeed = 20f;
+    [Header("Shake")]
+    [SerializeField] private float shakeAmount = 0.05f;
+    [SerializeField] private float shakeSpeed = 20f;
 
-    [Header("Materiais")]
-    public PhysicsMaterial2D normalMaterial;
-    public PhysicsMaterial2D slipperyMaterial;
+    [Header("Materials")]
+    [SerializeField] private PhysicsMaterial2D normalMaterial;
+    [SerializeField] private PhysicsMaterial2D slipperyMaterial;
 
     private Vector3 originalPosition;
-    private Collider2D col;
-    private bool collapsed = false;
+    private Collider2D platformCollider;
+    private Rigidbody2D platformRigidbody;
+    private bool collapsed;
 
-    void Start()
+    private void Start()
     {
         originalPosition = transform.position;
-        col = GetComponent<Collider2D>();
+        platformCollider = GetComponent<Collider2D>();
+        platformRigidbody = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        int steps = PlayerStepCounter.instance.steps;
-
-        if (collapsed)
+        PlayerStepCounter counter = PlayerStepCounter.Instance;
+        if (counter == null || collapsed)
             return;
 
-        // TREMER
+        int steps = counter.Steps;
+
         if (steps >= stepsToShake)
-        {
             Shake();
-        }
         else
-        {
             ResetPosition();
-        }
 
-        // ESCORREGAR
-        if (steps >= stepsToSlip)
-        {
-            col.sharedMaterial = slipperyMaterial;
-        }
-        else
-        {
-            col.sharedMaterial = normalMaterial;
-        }
+        if (platformCollider != null)
+            platformCollider.sharedMaterial = steps >= stepsToSlip ? slipperyMaterial : normalMaterial;
 
-        // COLAPSAR
         if (steps >= stepsToCollapse)
-        {
             Collapse();
-        }
     }
 
-    void Shake()
+    private void Shake()
     {
         float offset = Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
         transform.position = originalPosition + new Vector3(offset, 0f, 0f);
     }
 
-    void ResetPosition()
+    private void ResetPosition()
     {
         transform.position = originalPosition;
     }
 
-    void Collapse()
+    private void Collapse()
     {
         collapsed = true;
-        col.enabled = false;
 
-        Debug.Log("Plataforma colapsou!");
+        if (platformCollider != null)
+            platformCollider.enabled = false;
 
-        // efeito simples de queda
-        GetComponent<Rigidbody2D>()?.AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+        if (platformRigidbody != null)
+            platformRigidbody.AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
     }
 }

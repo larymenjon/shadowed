@@ -1,26 +1,27 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float maxSpeed = 7f;
-    public float acceleration = 70f;
-    public float deceleration = 90f;
-    public float airControlPercent = 0.75f;
+    [SerializeField] private float maxSpeed = 7f;
+    [SerializeField] private float acceleration = 70f;
+    [SerializeField] private float deceleration = 90f;
+    [SerializeField] private float airControlPercent = 0.75f;
 
     [Header("Jump Feel")]
-    public float jumpForce = 11f;
-    public float fallMultiplier = 3f;
-    public float lowJumpMultiplier = 2f;
-    public float coyoteTime = 0.12f;
-    public float jumpBufferTime = 0.12f;
-    public int extraJumps = 1;
+    [SerializeField] private float jumpForce = 11f;
+    [SerializeField] private float fallMultiplier = 3f;
+    [SerializeField] private float lowJumpMultiplier = 2f;
+    [SerializeField] private float coyoteTime = 0.12f;
+    [SerializeField] private float jumpBufferTime = 0.12f;
+    [SerializeField] private int extraJumps = 1;
 
     [Header("Anti Stick")]
-    public float wallNormalThreshold = 0.6f;
-    public float wallSlideMaxFallSpeed = -14f;
+    [SerializeField] private float wallNormalThreshold = 0.6f;
+    [SerializeField] private float wallSlideMaxFallSpeed = -14f;
 
     [Header("Combat")]
     [SerializeField] private int attackDamage = 1;
@@ -31,12 +32,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Sprite attackSprite;
 
-    // Usado por inimigos
+    [Header("Steps")]
+    [SerializeField] private float distanceToCountStep = 2.0f;
+
     public float CurrentMoveInput { get; private set; }
+    public float MaxSpeed => maxSpeed;
     public bool PlayerIsMoving => rb != null && (Mathf.Abs(rb.linearVelocity.x) > 0.05f || Mathf.Abs(rb.linearVelocity.y) > 0.12f);
 
     private Rigidbody2D rb;
-    private SpriteRenderer sprite;
+    private SpriteRenderer spriteRenderer;
 
     private bool isGrounded;
     private bool isTouchingWall;
@@ -47,11 +51,7 @@ public class PlayerController : MonoBehaviour
     private float jumpBufferTimer;
     private int jumpsRemaining;
     private float moveInput;
-
-    // Necessario para calcular os passos
     private float distanceCounter;
-    public float distanceToCountStep = 2.0f;
-
     private float lastAttackTime = -999f;
     private Sprite defaultSprite;
     private Coroutine attackSpriteRoutine;
@@ -59,8 +59,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
-        defaultSprite = sprite != null ? sprite.sprite : null;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        defaultSprite = spriteRenderer.sprite;
         rb.gravityScale = 1f;
     }
 
@@ -75,17 +75,7 @@ public class PlayerController : MonoBehaviour
         UpdateTimers();
         HandleJumpExecution();
         HandleBetterJump();
-
-        // LOGICA DE CONTAGEM DE PASSOS
-        if (isGrounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
-        {
-            distanceCounter += Mathf.Abs(rb.linearVelocity.x) * Time.deltaTime;
-            if (distanceCounter >= distanceToCountStep)
-            {
-                if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.steps++;
-                distanceCounter = 0f;
-            }
-        }
+        CountSteps();
     }
 
     private void FixedUpdate()
@@ -100,8 +90,10 @@ public class PlayerController : MonoBehaviour
         CurrentMoveInput = moveInput;
         jumpHeld = Input.GetKey(KeyCode.Space);
 
-        if (moveInput > 0f) sprite.flipX = false;
-        else if (moveInput < 0f) sprite.flipX = true;
+        if (moveInput > 0f)
+            spriteRenderer.flipX = false;
+        else if (moveInput < 0f)
+            spriteRenderer.flipX = true;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -137,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayAttackSprite()
     {
-        if (sprite == null || attackSprite == null)
+        if (attackSprite == null || spriteRenderer == null)
             return;
 
         if (attackSpriteRoutine != null)
@@ -148,20 +140,16 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator AttackSpriteRoutine()
     {
-        sprite.sprite = attackSprite;
+        spriteRenderer.sprite = attackSprite;
         yield return new WaitForSeconds(attackSpriteDuration);
-        sprite.sprite = defaultSprite;
+        spriteRenderer.sprite = defaultSprite;
         attackSpriteRoutine = null;
     }
 
     private void UpdateTimers()
     {
         jumpBufferTimer -= Time.deltaTime;
-
-        if (isGrounded)
-            coyoteTimer = coyoteTime;
-        else
-            coyoteTimer -= Time.deltaTime;
+        coyoteTimer = isGrounded ? coyoteTime : coyoteTimer - Time.deltaTime;
     }
 
     private void HandleMovement()
@@ -173,8 +161,7 @@ public class PlayerController : MonoBehaviour
         float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
         accelRate *= controlMultiplier;
 
-        float movement = speedDiff * accelRate;
-        rb.AddForce(Vector2.right * movement, ForceMode2D.Force);
+        rb.AddForce(Vector2.right * (speedDiff * accelRate), ForceMode2D.Force);
     }
 
     private void HandleJumpExecution()
@@ -183,14 +170,10 @@ public class PlayerController : MonoBehaviour
             return;
 
         bool canGroundOrCoyoteJump = isGrounded || coyoteTimer > 0f;
-
         if (canGroundOrCoyoteJump)
         {
             DoJump();
-
-            // LOGICA DE CONTAGEM DE PULO
-            if (PlayerStepCounter.instance != null) PlayerStepCounter.instance.jumps++;
-
+            PlayerStepCounter.Instance?.RegisterJump();
             coyoteTimer = 0f;
             return;
         }
@@ -206,7 +189,6 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-
         isGrounded = false;
         wantsJump = false;
         jumpBufferTimer = 0f;
@@ -237,20 +219,32 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, wallSlideMaxFallSpeed);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void CountSteps()
     {
-        if (!collision.gameObject.CompareTag("Ground"))
+        if (!isGrounded || Mathf.Abs(rb.linearVelocity.x) <= 0.1f)
+        {
+            distanceCounter = 0f;
+            return;
+        }
+
+        distanceCounter += Mathf.Abs(rb.linearVelocity.x) * Time.deltaTime;
+        if (distanceCounter < distanceToCountStep)
             return;
 
-        EvaluateCollisionContacts(collision);
+        PlayerStepCounter.Instance?.RegisterStep();
+        distanceCounter = 0f;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+            EvaluateCollisionContacts(collision);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (!collision.gameObject.CompareTag("Ground"))
-            return;
-
-        EvaluateCollisionContacts(collision);
+        if (collision.gameObject.CompareTag("Ground"))
+            EvaluateCollisionContacts(collision);
     }
 
     private void EvaluateCollisionContacts(Collision2D collision)

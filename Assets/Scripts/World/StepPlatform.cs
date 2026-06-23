@@ -1,76 +1,68 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class StepPlatform : MonoBehaviour
 {
-    [Header("Regras")]
-    public int stepsToAppear = 6;
-    public int jumpsToDisappear = 5;
+    [Header("Rules")]
+    [SerializeField] private int stepsToAppear = 6;
+    [SerializeField] private int jumpsToDisappear = 5;
 
-    private SpriteRenderer sprite;
-    private Collider2D col;
-
-    // Alterado para true para começar aparecendo
-    private bool appeared = true;
-
+    private SpriteRenderer spriteRenderer;
+    private Collider2D platformCollider;
+    private bool isVisible = true;
     private int stepCheckpoint;
     private int jumpCheckpoint;
 
-    void Start()
+    private void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
-        col = GetComponent<Collider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        platformCollider = GetComponent<Collider2D>();
 
-        // Se começa aparecendo, o checkpoint que importa agora é o de pulos
-        if (PlayerStepCounter.instance != null)
-        {
-            jumpCheckpoint = PlayerStepCounter.instance.jumps;
-        }
-        
-        ShowPlatform(); // Garante que comece visível
+        PlayerStepCounter counter = PlayerStepCounter.Instance;
+        if (counter != null)
+            jumpCheckpoint = counter.Jumps;
+
+        ShowPlatform();
     }
 
-    void Update()
+    private void Update()
     {
-        if (PlayerStepCounter.instance == null) return;
+        PlayerStepCounter counter = PlayerStepCounter.Instance;
+        if (counter == null)
+            return;
 
-        // QUANTOS PASSOS DESDE QUE A PLATAFORMA SUMIU
-        int stepsSinceHide = Mathf.Max(0, PlayerStepCounter.instance.steps - stepCheckpoint);
+        int stepsSinceHide = Mathf.Max(0, counter.Steps - stepCheckpoint);
+        int jumpsSinceShow = Mathf.Max(0, counter.Jumps - jumpCheckpoint);
 
-        // QUANTOS PULOS DESDE QUE A PLATAFORMA APARECEU
-        int jumpsSinceShow = Mathf.Max(0, PlayerStepCounter.instance.jumps - jumpCheckpoint);
-
-        // APARECER
-        if (!appeared && stepsSinceHide >= stepsToAppear)
+        if (!isVisible && stepsSinceHide >= stepsToAppear)
         {
-            appeared = true;
-            jumpCheckpoint = PlayerStepCounter.instance.jumps;
-
-            Debug.Log("Plataforma APARECEU | passos desde sumir: " + stepsSinceHide);
-
+            isVisible = true;
+            jumpCheckpoint = counter.Jumps;
             ShowPlatform();
         }
 
-        // DESAPARECER
-        if (appeared && jumpsSinceShow >= jumpsToDisappear)
+        if (isVisible && jumpsSinceShow >= jumpsToDisappear)
         {
-            Debug.Log("Plataforma SUMIU | pulos desde aparecer: " + jumpsSinceShow);
-
-            appeared = false;
-            stepCheckpoint = PlayerStepCounter.instance.steps;
-
+            isVisible = false;
+            stepCheckpoint = counter.Steps;
             HidePlatform();
         }
     }
 
-    void ShowPlatform()
+    private void ShowPlatform()
     {
-        sprite.enabled = true;
-        col.enabled = true;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
+        if (platformCollider != null)
+            platformCollider.enabled = true;
     }
 
-    void HidePlatform()
+    private void HidePlatform()
     {
-        sprite.enabled = false;
-        col.enabled = false;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = false;
+
+        if (platformCollider != null)
+            platformCollider.enabled = false;
     }
 }

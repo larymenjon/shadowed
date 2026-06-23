@@ -1,24 +1,22 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class FinalDoor : MonoBehaviour
 {
     [Header("Flow")]
-    public string transitionScene; // PassGame ou EndGame
-    public string nextLevel;        // vazio no fim do jogo
+    [SerializeField] private string transitionScene; // PassGame ou EndGame
+    [SerializeField] private string nextLevel;        // vazio no fim do jogo
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Time.timeScale = 1f;
-            // Se existir próximo nível, salva
-            if (!string.IsNullOrEmpty(nextLevel))
-            {
-                GameManager.Instance.nextLevel = nextLevel;
-            }
-            SceneManager.LoadScene(transitionScene);
+        if (!other.CompareTag("Player"))
+            return;
 
-        }
+        Time.timeScale = 1f;
+
+        if (!string.IsNullOrEmpty(nextLevel) && GameManager.Instance != null)
+            GameManager.Instance.NextLevel = nextLevel;
+
+        SceneManager.LoadScene(transitionScene);
     }
 }

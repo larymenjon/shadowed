@@ -14,9 +14,9 @@ using UnityEngine.InputSystem.UI;
 
 public class MainMenuUI : MonoBehaviour
 {
-    public GameObject optionsPanel;
-    public GameObject creditsPanel;
-    public GameObject controlsPanel;
+    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject creditsPanel;
+    [SerializeField] private GameObject controlsPanel;
     [SerializeField] private GameObject menuOptionsRoot;
 
     [Header("Menu Navigation")]

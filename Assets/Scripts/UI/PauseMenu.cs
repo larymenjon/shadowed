@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
     [Header("Pause Panel Slots")]
     [SerializeField] private Transform optionsPanelSlot;
     [SerializeField] private Transform controlsPanelSlot;
+
     private bool paused;
 
     private void Update()
@@ -17,22 +18,12 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePause()
     {
-        paused = !paused;
-
-        if (pausePanel != null)
-            pausePanel.SetActive(paused);
-
-        Time.timeScale = paused ? 0f : 1f;
+        SetPauseState(!paused);
     }
 
     public void Resume()
     {
-        paused = false;
-
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
-
-        Time.timeScale = 1f;
+        SetPauseState(false);
     }
 
     public void GoToMainMenu()
@@ -51,5 +42,15 @@ public class PauseMenu : MonoBehaviour
     public Transform GetControlsPanelSlot()
     {
         return controlsPanelSlot;
+    }
+
+    private void SetPauseState(bool isPaused)
+    {
+        paused = isPaused;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(isPaused);
+
+        Time.timeScale = isPaused ? 0f : 1f;
     }
 }
