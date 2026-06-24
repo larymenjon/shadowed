@@ -1,0 +1,22 @@
+* [33m8f42b72[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mLevel-Design[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Correções de Audio e Scenes
+* [33m992b4fb[m Alguns UI da barra do Inimigo
+* [33meacd6e4[m Criado Pause, Ajustes finos de UI
+* [33mc5135bf[m Adcionado Controles Menu, Creditos, Options, Mudanças de UI básicas
+*   [33m2ba5cb2[m Fix: Resolvido conflito no PlayerController após merge com Level-Design
+[32m|[m[33m\[m  
+[32m|[m * [33mec1afc4[m[33m ([m[1;31morigin/Level-Design[m[33m)[m Mapa
+* [33m|[m [33m5f5e23f[m Backup de alterações locais antes do merge de Level-Design
+* [33m|[m [33m80682bc[m Trabalho em progresso na main
+[33m|[m[33m/[m  
+* [33m2b0f65e[m[33m ([m[1;32mmain[m[33m)[m Nova Intro, Mudança nas fontes do Menu e Hover dos Botões
+* [33m547a052[m Mudanças na UI,  Loading Scene, Dialogo/Tutorial
+*   [33me101674[m Merge branch 'main' of https://github.com/larymenjon/shadowed
+[34m|[m[35m\[m  
+[34m|[m * [33ma3c9462[m Update team member information in README
+[34m|[m * [33m758157a[m New README 24.01
+* [35m|[m [33m4bf3dff[m Alteracao da dimensao das telas
+[35m|[m[35m/[m  
+* [33mc2e67dd[m Finalizacao
+* [33me66d72e[m New Readme (in Construction)
+* [33m792aaf8[m Primeira Versão Shadowed
+* [33m2485424[m Initial commit
