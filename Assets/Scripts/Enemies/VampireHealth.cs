@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -26,7 +26,7 @@ public class VampireHealth : MonoBehaviour
         if (dead)
             return;
 
-        currentHealth -= Mathf.Max(0, damage);
+        currentHealth = Mathf.Max(0, currentHealth - Mathf.Max(0, damage));
         UpdateHealthBar();
 
         if (currentHealth <= 0)
@@ -36,8 +36,15 @@ public class VampireHealth : MonoBehaviour
     private void Die()
     {
         dead = true;
+        NotifyRoomMember();
         TryDropKey();
         Destroy(gameObject);
+    }
+
+    private void NotifyRoomMember()
+    {
+        EnemyRoomMember roomMember = GetComponentInParent<EnemyRoomMember>();
+        roomMember?.NotifyKilled();
     }
 
     private void TryDropKey()

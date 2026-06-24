@@ -1,15 +1,19 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelEnemyAutoSpawner : MonoBehaviour
 {
     [Serializable]
-    public class LevelSpawnConfig
+    private class LevelSpawnConfig
     {
-        public string sceneName;
-        public GameObject enemyPrefab;
-        public int enemyCount = 1;
+        [SerializeField] private string sceneName;
+        [SerializeField] private GameObject enemyPrefab;
+        [SerializeField] private int enemyCount = 1;
+
+        public string SceneName => sceneName;
+        public GameObject EnemyPrefab => enemyPrefab;
+        public int EnemyCount => enemyCount;
     }
 
     [Header("Config")]
@@ -32,7 +36,7 @@ public class LevelEnemyAutoSpawner : MonoBehaviour
     {
         string activeScene = SceneManager.GetActiveScene().name;
         LevelSpawnConfig config = FindConfig(activeScene);
-        if (config == null || config.enemyPrefab == null)
+        if (config == null || config.EnemyPrefab == null)
         {
             Debug.LogWarning("[LevelEnemyAutoSpawner] Sem configuracao de spawn para: " + activeScene);
             return;
@@ -47,11 +51,11 @@ public class LevelEnemyAutoSpawner : MonoBehaviour
             }
         }
 
-        int amount = Mathf.Max(0, config.enemyCount);
+        int amount = Mathf.Max(0, config.EnemyCount);
         for (int i = 0; i < amount; i++)
         {
             Vector3 position = ResolveSpawnPosition(i, amount);
-            Instantiate(config.enemyPrefab, position, Quaternion.identity);
+            Instantiate(config.EnemyPrefab, position, Quaternion.identity);
         }
     }
 
@@ -62,7 +66,7 @@ public class LevelEnemyAutoSpawner : MonoBehaviour
 
         for (int i = 0; i < levelConfigs.Length; i++)
         {
-            if (levelConfigs[i] != null && levelConfigs[i].sceneName == sceneName)
+            if (levelConfigs[i] != null && levelConfigs[i].SceneName == sceneName)
                 return levelConfigs[i];
         }
 

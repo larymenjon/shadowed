@@ -1,27 +1,36 @@
-<p><br></p>
-<figure><img src="https://img.itch.zone/aW1nLzI1MTgwMzQ0LnBuZw==/original/pQzXte.png"></figure>
-<p>A dark 2D platformer puzzle game built around a single core rule:</p>
-<h4>" The world only moves when the player moves"</h4>
-<p>
-Trapped in a shadowy and mysterious environment, the player must find the correct exit while everything around reacts directly to their actions. Enemies, platforms, and traps only move when you walk or jump &mdash; turning every step into a strategic decision.
-</p>
-<p>
-Move carefully. Sometimes, standing still is the safest choice.
-</p>
-<h2>&nbsp;<img src="https://img.itch.zone/aW1nLzI1MTgwMzg5LnBuZw==/original/NlM0e8.png"></h2>
-<ul><li>Level 1 – The Right Door:&nbsp;Only one door is the correct one. Observe the environment before making your move.</li><li>Level 2 – Unstable Platforms:&nbsp;Platforms appear or disappear based on the number of movements and jumps performed.</li><li>&nbsp;Level 3 – Stretching Platforms:&nbsp;Platforms stretch or extend according to the player’s movements, forcing careful planning.</li></ul>
-<p>
-The game currently features <strong>one enemy &mdash; a vampire</strong>, which also only moves when the player moves, reinforcing the main Game Jam mechanic.
-</p>
-<p>
-More levels, enemies, and challenges are planned for future updates.
-</p>
-<h2><img src="https://img.itch.zone/aW1nLzI1MTgwNDAwLnBuZw==/original/nemktP.png"></h2>
-<p>
-Plan every step carefully. One wrong move can be your last</p>
-<p class="text-center"><img src="https://img.itch.zone/aW1nLzI1MTgwNDc5LnBuZw==/original/QLToB1.png"></p>
-<h4 class="text-center"><img src="https://img.itch.zone/aW1nLzI1MTgwNDgzLnBuZw==/original/UJ1iYT.png"></h4>
-<h4></h4>
+# Shadowed
+
+Um cavaleiro avista um castelo ao longe e, ao se aproximar, cai em uma armadilha. Agora ele precisa lutar, fugir e explorar para escapar do castelo do Vampiro antes que a noite caia por completo.
+
+Jogo de plataforma 2D para mobile (Android/iOS), desenvolvido em Unity.
+
+## Features
+
+- Movimento ágil: corrida, pulo, pulo duplo e dash com invencibilidade temporária
+- Combate corpo a corpo com combo de até 3 golpes
+- Inimigos com IA autônoma (patrulha, alerta, perseguição e ataque)
+- Mecânica de perseguição: fuja de uma sombra que avança pela fase
+- Sistema de pontos com combos/multiplicadores e moeda persistente
+- Progressão de habilidades ao longo das fases (pulo duplo, dash aéreo, lanterna)
+- Chefe final com múltiplas fases de combate
+- Recordes por fase (pontuação, tempo e runs sem dano)
+
+## Como rodar
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/shadowed.git
+   ```
+2. Abra o projeto na Unity (versão recomendada: 2022.3 LTS ou superior).
+3. Abra a cena `Boot` (ou `Menu`) dentro de `Assets/Scenes`.
+4. Pressione Play no Editor para testar com teclado (WASD + teclas de ação) ou conecte um dispositivo Android/iOS para testar os controles touch.
+
+## Build mobile
+
+1. `File > Build Settings`
+2. Selecione a plataforma (Android ou iOS)
+3. Adicione as cenas necessárias em ordem (Boot, Menu, Fases...)
+4. Clique em `Build` ou `Build and Run`
 <h4>About the Project</h4>
 <p><strong>Game Design & Programming</strong></p>
 <p>

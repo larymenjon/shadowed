@@ -1,17 +1,17 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class OptionsManager : MonoBehaviour
 {
+    public const string MusicVolumeKey = "Options.MusicVolume";
+    public const string SfxVolumeKey = "Options.SfxVolume";
+
     [Header("Audio")]
     [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private TMP_Text volumeNumberText;
     [SerializeField] private TMP_Text volumeNumberSfxText;
-
-    public const string MusicVolumeKey = "Options.MusicVolume";
-    public const string SfxVolumeKey = "Options.SfxVolume";
 
     public static float MusicVolume => PlayerPrefs.GetFloat(MusicVolumeKey, 1f);
     public static float SfxVolume => PlayerPrefs.GetFloat(SfxVolumeKey, 1f);
@@ -49,8 +49,8 @@ public class OptionsManager : MonoBehaviour
         if (sfxVolumeSlider != null)
             sfxVolumeSlider.value = sfx;
 
-        SetMusicVolume(music);
-        SetSfxVolume(sfx);
+        UpdateMusicVolumeLabel(music);
+        UpdateSfxVolumeLabel(sfx);
     }
 
     private void UpdateMusicVolumeLabel(float normalizedValue)
@@ -58,8 +58,7 @@ public class OptionsManager : MonoBehaviour
         if (volumeNumberText == null)
             return;
 
-        int percentage = Mathf.RoundToInt(Mathf.Clamp01(normalizedValue) * 100f);
-        volumeNumberText.text = percentage.ToString();
+        volumeNumberText.text = Mathf.RoundToInt(Mathf.Clamp01(normalizedValue) * 100f).ToString();
     }
 
     private void UpdateSfxVolumeLabel(float normalizedValue)
@@ -67,8 +66,7 @@ public class OptionsManager : MonoBehaviour
         if (volumeNumberSfxText == null)
             return;
 
-        int percentage = Mathf.RoundToInt(Mathf.Clamp01(normalizedValue) * 100f);
-        volumeNumberSfxText.text = percentage.ToString();
+        volumeNumberSfxText.text = Mathf.RoundToInt(Mathf.Clamp01(normalizedValue) * 100f).ToString();
     }
 
     private void BindSliderEvents()

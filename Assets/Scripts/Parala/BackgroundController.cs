@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BackgroundController : MonoBehaviour
 {
-    private float startPos;
-    public GameObject cam;
-    public float parallaxEffect; // The speed at which the background should move relative to the camera
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float parallaxEffect = 0.5f;
 
-    void Start()
+    private float startX;
+
+    private void Awake()
     {
-        startPos = transform.position.x;
+        startX = transform.position.x;
+
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
     }
 
-    void FixUpdate()
+    private void FixedUpdate()
     {
-        // Calculate distance background move based on cam movement
-        float distance = cam.transform.position.x * parallaxEffect; // 0 = move with cam || 1 = won't move || 0.5 = half
+        if (cameraTransform == null)
+            return;
 
-        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        float distance = cameraTransform.position.x * parallaxEffect;
+        transform.position = new Vector3(startX + distance, transform.position.y, transform.position.z);
     }
 }

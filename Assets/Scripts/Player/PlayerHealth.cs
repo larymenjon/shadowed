@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxLives = 3;
-    public float damageCooldown = 1f;
+    [SerializeField] private int maxLives = 3;
+    [SerializeField] private float damageCooldown = 1f;
     [SerializeField] private string gameOverSceneName = "EndGame";
 
     private int currentLives;
@@ -16,9 +16,7 @@ public class PlayerHealth : MonoBehaviour
     {
         damageFeedback = GetComponent<PlayerDamageFeedback>();
         currentLives = maxLives;
-
-        if (UIHealth.Instance != null)
-            UIHealth.Instance.UpdateHearts(currentLives);
+        UIHealth.Instance?.UpdateHearts(currentLives);
     }
 
     public void TakeDamage(int amount)
@@ -26,27 +24,21 @@ public class PlayerHealth : MonoBehaviour
         if (!canTakeDamage)
             return;
 
-        currentLives -= amount;
-
-        if (UIHealth.Instance != null)
-            UIHealth.Instance.UpdateHearts(currentLives);
+        currentLives = Mathf.Max(0, currentLives - amount);
+        UIHealth.Instance?.UpdateHearts(currentLives);
 
         if (currentLives <= 0)
         {
             Die();
+            return;
         }
-        else
-        {
-            if (damageFeedback != null)
-                damageFeedback.Blink();
 
-            StartCoroutine(DamageCooldownRoutine());
-        }
+        damageFeedback?.Blink();
+        StartCoroutine(DamageCooldownRoutine());
     }
 
     private void Die()
     {
-        // Backward compatibility: old prefabs/scenes may still have "GameOver" serialized.
         if (gameOverSceneName == "GameOver")
             gameOverSceneName = "EndGame";
 

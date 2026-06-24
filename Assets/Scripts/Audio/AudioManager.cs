@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
@@ -29,10 +29,7 @@ public class AudioManager : MonoBehaviour
     {
         ApplyMusicVolume();
 
-        if (!isLevelScene)
-            return;
-
-        if (playOnStart)
+        if (isLevelScene && playOnStart)
             PlayPlaylistFromStart();
     }
 
@@ -43,10 +40,7 @@ public class AudioManager : MonoBehaviour
 
         ApplyMusicVolume();
 
-        if (musicSource == null || playlist == null || playlist.Length == 0)
-            return;
-
-        if (musicSource.isPlaying)
+        if (musicSource == null || playlist == null || playlist.Length == 0 || musicSource.isPlaying)
             return;
 
         PlayNextTrack();
@@ -119,8 +113,7 @@ public class AudioManager : MonoBehaviour
         if (musicSource == null)
             return;
 
-        float optionsVolume = OptionsManager.MusicVolume;
-        musicSource.volume = Mathf.Clamp01(optionsVolume * musicVolumeMultiplier);
+        musicSource.volume = Mathf.Clamp01(OptionsManager.MusicVolume * musicVolumeMultiplier);
     }
 
     private void EnsureAudioSource()

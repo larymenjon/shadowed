@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverMenuUI : MonoBehaviour
@@ -7,7 +7,6 @@ public class GameOverMenuUI : MonoBehaviour
 
     private void Start()
     {
-        // Garante que a cena de Game Over não fique pausada.
         Time.timeScale = 1f;
     }
 
